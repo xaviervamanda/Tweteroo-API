@@ -47,9 +47,9 @@ app.post ("/tweets", (req, res) => {
 app.get ("/tweets", (req, res) => {
     const {page} = parseInt(req.query);
     const updateTweets = [];
-    tweets = tweets.reverse();
     if (tweets.length !== 0){
-       tweets.map ((t) => {
+        tweets = tweets.reverse();
+        tweets.map ((t) => {
             const element = users.find ((u) => u.username === t.username)
             t.avatar = element.avatar
             updateTweets.push(t)
@@ -61,7 +61,7 @@ app.get ("/tweets", (req, res) => {
     if (page !== undefined){
         const startIndex = (page - 1)*10;
         const endIndex = startIndex + 10;
-        res.send(tweets.slice(startIndex, endIndex));
+        res.send(updateTweets.slice(startIndex, endIndex));
     }
     if (page === undefined){
         res.send(updateTweets.slice(0, 11));
