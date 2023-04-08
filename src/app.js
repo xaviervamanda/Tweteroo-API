@@ -9,19 +9,32 @@ app.use(express.json());
 const PORT = 5000;
 const users = [];
 const tweets = [];
-const user = "";
-const userAvatar = "";
-const userTweet = "";
+let userName = "";
+let userAvatar = "";
+let userTweet = "";
 
-app.post ("/sing-up", (req, res) => {
+app.post ("/sign-up", (req, res) => {
     const {username, avatar} = req.body;
     if (!username || !avatar || typeof(username) !== "string" || typeof(avatar) !== "string"){
-        return res.status(400).send("Todos os campos são obrigatórios!")
+        return res.status(400).send("Todos os campos são obrigatórios!");
     }
     users.push(username);
-    user = username;
+    userName = username;
     userAvatar = avatar;
-    res.send("OK");
+    res.status(201).send("OK");
+})
+
+app.post ("/tweets", (req, res) => {
+    const {tweet} = req.body;
+    const {user} = req.headers;
+    if (user !== userName){
+        return res.sendStatus(401);
+    }
+    if (!tweet){
+        return res.status(400).send("Todos os campos são obrigatórios!");
+    }
+    tweets.push(tweet);
+    res.status(201).send("OK");
 })
 
 app.listen (PORT, () => `Servidor rodando na porta ${PORT}`);
