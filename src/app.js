@@ -8,9 +8,9 @@ app.use(express.json());
 
 const PORT = 5000;
 const users = [];
-const tweets = [];
-let userName = ""
-
+let tweets = [];
+// let userName = ""
+const userName = "amanda"
 
 
 app.post ("/sign-up", (req, res) => {
@@ -21,7 +21,7 @@ app.post ("/sign-up", (req, res) => {
     if (typeof(username) !== "string" || typeof(avatar) !== "string"){
         res.sendStatus(400);
     }
-    userName = username;
+    // userName = username;
     users.push({username, avatar});
     console.log(users);
     res.status(201).send("OK");
