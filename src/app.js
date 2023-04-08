@@ -45,17 +45,35 @@ app.post ("/tweets", (req, res) => {
 });
 
 app.get ("/tweets", (req, res) => {
-    const arrayTweets = tweets.slice(-10);
+    const {page} = parseInt(req.query);
     const updateTweets = [];
+    tweets = tweets.reverse();
+    if (tweets.length !== 0){
+       tweets.map ((t) => {
+            const element = users.find ((u) => u.username === t.username)
+            t.avatar = element.avatar
+            updateTweets.push(t)
+        }); 
+    }
     if (tweets.length === 0){
         return res.send(tweets);
     }
-    arrayTweets.map ((t) => {
-        const element = users.find ((u) => u.username === t.username)
-        t.avatar = element.avatar
-        updateTweets.push(t)
-    });
-    res.send (updateTweets);
+    if (page !== undefined){
+        const startIndex = (page - 1)*10;
+        const endIndex = startIndex + 10;
+        res.send(tweets.slice(startIndex, endIndex));
+    }
+    if (page === undefined){
+        res.send(updateTweets.slice(0, 11));
+    }
+});
+
+app.get ("/tweets/:USERNAME", (req, res) => {
+    const {USERNAME} = req.params;
+    const userData = users.find (u => u.username === USERNAME);
+    const userTweets = tweets.filter(t => t.username === USERNAME);
+    userTweets.forEach(t => t.avatar = userData.avatar);
+    res.send(userTweets);
 });
 
 app.listen (PORT, () => `Servidor rodando na porta ${PORT}`);
