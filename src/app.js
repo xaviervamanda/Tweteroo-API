@@ -57,13 +57,17 @@ app.get ("/tweets", (req, res) => {
     if (tweets.length === 0){
         return res.send(tweets);
     }
+    // retornar 400 quando page não for maior ou igual a 1
+    if (page < 1){
+        return res.status(400).send("Informe uma página válida!");
+    }
+    if (page === undefined){
+        res.send(updateTweets.slice(0, 10));
+    }
     if (page !== undefined){
         const startIndex = (page - 1)*10;
         const endIndex = startIndex + 10;
         res.send(tweets.slice(startIndex, endIndex));
-    }
-    if (page === undefined){
-        res.send(updateTweets.slice(0, 10));
     }
 });
 
