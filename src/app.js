@@ -9,8 +9,7 @@ app.use(express.json());
 const PORT = 5000;
 const users = [];
 let tweets = [];
-// let userName = ""
-const userName = "amanda"
+let userName = ""
 
 
 app.post ("/sign-up", (req, res) => {
@@ -21,7 +20,7 @@ app.post ("/sign-up", (req, res) => {
     if (typeof(username) !== "string" || typeof(avatar) !== "string"){
         res.sendStatus(400);
     }
-    // userName = username;
+    userName = username;
     users.push({username, avatar});
     console.log(users);
     res.status(201).send("OK");
@@ -44,26 +43,50 @@ app.post ("/tweets", (req, res) => {
     res.status(201).send("OK");
 });
 
+// app.get ("/tweets", (req, res) => {
+//     const arrayTweets = tweets.slice(-10);
+//     const updateTweets = [];
+//     if (tweets.length === 0){
+//         return res.send(tweets);
+//     }
+//     arrayTweets.map ((t) => {
+//         const element = users.find ((u) => u.username === t.username)
+//         t.avatar = element.avatar
+//         updateTweets.push(t)
+//     });
+//     res.send (updateTweets);
+// });
+
 app.get ("/tweets", (req, res) => {
-    const arrayTweets = tweets.slice(-10);
+    const {page} = parseInt(req.query);
     const updateTweets = [];
+    tweets = tweets.reverse();
+    if (tweets.length !== 0){
+       tweets.map ((t) => {
+            const element = users.find ((u) => u.username === t.username)
+            t.avatar = element.avatar
+            updateTweets.push(t)
+        }); 
+    }
     if (tweets.length === 0){
         return res.send(tweets);
     }
-    arrayTweets.map ((t) => {
-        const element = users.find ((u) => u.username === t.username)
-        t.avatar = element.avatar
-        updateTweets.push(t)
-    });
-    res.send (updateTweets);
+    if (page !== undefined){
+        const startIndex = (page - 1)*10;
+        const endIndex = startIndex + 10;
+        res.send(tweets.slice(startIndex, endIndex));
+    }
+    if (page === undefined){
+        res.send(updateTweets.slice(0, 11));
+    }
 });
 
-// app.get ("/tweets/:USERNAME", (req, res) => {
-//     const {USERNAME} = req.params;
-//     const userData = users.find (u => u.username === USERNAME);
-//     const userTweets = tweets.filter(t => t.username === USERNAME);
-//     userTweets.forEach(t => t.avatar = userData.avatar);
-//     res.send(userTweets);
-// });
+app.get ("/tweets/:USERNAME", (req, res) => {
+    const {USERNAME} = req.params;
+    const userData = users.find (u => u.username === USERNAME);
+    const userTweets = tweets.filter(t => t.username === USERNAME);
+    userTweets.forEach(t => t.avatar = userData.avatar);
+    res.send(userTweets);
+});
 
 app.listen (PORT, () => `Servidor rodando na porta ${PORT}`);
