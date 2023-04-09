@@ -45,27 +45,17 @@ app.post ("/tweets", (req, res) => {
 });
 
 app.get ("/tweets", (req, res) => {
-    const {page} = parseInt(req.query);
+    const arrayTweets = tweets.slice(-10);
     const updateTweets = [];
-    if (tweets.length !== 0){
-        tweets = tweets.reverse();
-        tweets.map ((t) => {
-            const element = users.find ((u) => u.username === t.username)
-            t.avatar = element.avatar
-            updateTweets.push(t)
-        }); 
-    }
     if (tweets.length === 0){
         return res.send(tweets);
     }
-    if (page !== undefined){
-        const startIndex = (page - 1)*10;
-        const endIndex = startIndex + 10;
-        res.send(updateTweets.slice(startIndex, endIndex));
-    }
-    if (page === undefined){
-        res.send(updateTweets.slice(0, 11));
-    }
+    arrayTweets.map ((t) => {
+        const element = users.find ((u) => u.username === t.username)
+        t.avatar = element.avatar
+        updateTweets.push(t)
+    });
+    res.send (updateTweets);
 });
 
 app.get ("/tweets/:USERNAME", (req, res) => {
