@@ -45,11 +45,6 @@ app.post ("/tweets", (req, res) => {
 
 app.get ("/tweets", (req, res) => {
     let {page} = req.query;
-    if (page === undefined){
-        tweets = tweets.reverse();
-        res.send(tweets.slice(0, 10));
-    }
-    page = parseInt(page)
     const updateTweets = [];
     tweets = tweets.reverse();
     if (tweets.length !== 0){
@@ -59,6 +54,13 @@ app.get ("/tweets", (req, res) => {
             updateTweets.push(t)
         }); 
     }
+    if (page === undefined){
+        const partialTweets = updateTweets.slice(0, 10); 
+        tweets = tweets.reverse();
+        res.send (partialTweets)
+    }
+    page = parseInt(page)
+    
     if (tweets.length === 0){
         return res.send(tweets);
     }
