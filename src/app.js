@@ -58,12 +58,12 @@ app.get ("/tweets", (req, res) => {
     res.send (updateTweets);
 });
 
-app.get ("/tweets/:USERNAME", (req, res) => {
-    const {USERNAME} = req.params;
-    const userData = users.find (u => u.username === USERNAME);
-    const userTweets = tweets.filter(t => t.username === USERNAME);
-    userTweets.forEach(t => t.avatar = userData.avatar);
-    res.send(userTweets);
-});
+// app.get ("/tweets/:USERNAME", (req, res) => {
+//     const {USERNAME} = req.params;
+//     const userData = users.find (u => u.username === USERNAME);
+//     const userTweets = tweets.filter(t => t.username === USERNAME);
+//     userTweets.forEach(t => t.avatar = userData.avatar);
+//     res.send(userTweets);
+// });
 
 app.listen (PORT, () => `Servidor rodando na porta ${PORT}`);
