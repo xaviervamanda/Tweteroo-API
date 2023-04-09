@@ -45,6 +45,10 @@ app.post ("/tweets", (req, res) => {
 
 app.get ("/tweets", (req, res) => {
     let {page} = req.query;
+    if (page === undefined){
+        tweets = tweets.reverse();
+        res.send(tweets.slice(0, 10));
+    }
     page = parseInt(page)
     const updateTweets = [];
     tweets = tweets.reverse();
@@ -61,12 +65,7 @@ app.get ("/tweets", (req, res) => {
     if (page < 1){
         return res.status(400).send("Informe uma página válida!");
     }
-    if (page === undefined){
-        const partialTweets = updateTweets.slice(0, 10);
-        tweets = tweets.reverse();
-        res.send(partialTweets);
-    }
-    if (page !== undefined){
+    if (page >= 1){
             const startIndex = (page - 1)*10;
             const endIndex = startIndex + 10;
             const partialTweets = updateTweets.slice(startIndex, endIndex);
