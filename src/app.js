@@ -43,20 +43,6 @@ app.post ("/tweets", (req, res) => {
     res.status(201).send("OK");
 });
 
-// app.get ("/tweets", (req, res) => {
-//     const arrayTweets = tweets.slice(-10);
-//     const updateTweets = [];
-//     if (tweets.length === 0){
-//         return res.send(tweets);
-//     }
-//     arrayTweets.map ((t) => {
-//         const element = users.find ((u) => u.username === t.username)
-//         t.avatar = element.avatar
-//         updateTweets.push(t)
-//     });
-//     res.send (updateTweets);
-// });
-
 app.get ("/tweets", (req, res) => {
     const {page} = parseInt(req.query);
     const updateTweets = [];
@@ -77,7 +63,7 @@ app.get ("/tweets", (req, res) => {
         res.send(tweets.slice(startIndex, endIndex));
     }
     if (page === undefined){
-        res.send(updateTweets.slice(0, 11));
+        res.send(updateTweets.slice(0, 10));
     }
 });
 
